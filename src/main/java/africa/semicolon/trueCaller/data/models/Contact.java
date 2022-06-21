@@ -1,2 +1,20 @@
-package africa.semicolon.trueCaller.data.models;public class Contact {
+package africa.semicolon.trueCaller.data.models;
+
+import lombok.*;
+
+@Data
+
+@NoArgsConstructor
+@RequiredArgsConstructor
+
+
+
+public class Contact {
+    private  int id;
+    @NonNull
+    private String firstName;
+    @NonNull
+    private String lastName;
+    @NonNull
+    private String phoneNumber;
 }
