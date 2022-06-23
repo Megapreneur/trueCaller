@@ -4,6 +4,8 @@ import africa.semicolon.trueCaller.data.models.Contact;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ContactRespositoryImplTest {
@@ -26,9 +28,12 @@ class ContactRespositoryImplTest {
         Contact contact = new Contact();
         contact.setFirstName("Ade");
 
+        Contact contact1 = new Contact();
+        contact1.setFirstName("sam");
+
         Contact savedContact = contactRepository.save(contact);
         assertEquals(1, savedContact.getId());
-        Contact savedContact1 = contactRepository.save(contact);
+        Contact savedContact1 = contactRepository.save(contact1);
         assertEquals(2, savedContact1.getId());
         assertEquals(2, contactRepository.count());
     }
@@ -47,33 +52,26 @@ class ContactRespositoryImplTest {
         assertEquals("ade", foundContact.getFirstName());
     }
     @Test
-    public void saveContact_findByFirstNameReturnsContact(){
+    public void saveContact_findByNameReturnsContact(){
         Contact contact = new Contact();
         contact.setFirstName("ade");
+        contact.setLastName("ayo");
         Contact contact1 = new Contact();
         contact1.setFirstName("ayo");
+        contact1.setLastName("seun");
+        Contact contact2 = new Contact();
+        contact2.setLastName("ayo");
+        contact2.setFirstName("tola");
         Contact savedContact = contactRepository.save(contact);
         Contact savedContact1 = contactRepository.save(contact1);
+        Contact savedContact2 = contactRepository.save(contact2);
+        assertEquals(3 , contactRepository.count());
 
-        Contact foundContact = contactRepository.findByFirstName("ade");
-//        assertEquals(1, foundContact.getId());
-        assertEquals("ade", foundContact.getFirstName());
+        ArrayList<Contact> foundContact = contactRepository.findByName("ayo");
+        assertEquals(3, foundContact.size());
+        assertEquals("", foundContact.toString());
     }
-    @Test
-    public void saveContact_findByLastNameReturnsContact(){
-        Contact contact = new Contact();
-        contact.setLastName("ade");
-        contact.setLastName("meg");
-        Contact contact1 = new Contact();
-        contact1.setFirstName("seun");
-        contact1.setLastName("tola");
-        Contact savedContact = contactRepository.save(contact);
-        Contact savedContact1 = contactRepository.save(contact1);
 
-        assertEquals(2, contactRepository.count());
-        Contact searchedName = contactRepository.findByLastName("tola");
-        assertEquals("tola", searchedName.getLastName());
-    }
     @Test
     public void saveContact_findByPhoneNumberReturnsContact(){
         Contact contact = new Contact();
@@ -101,7 +99,6 @@ class ContactRespositoryImplTest {
         assertEquals(1, contactRepository.count());
 
 
-
         Contact newContact1 = new Contact();
         newContact1.setFirstName("Ola");
         newContact1.setLastName("Mee");
@@ -109,20 +106,15 @@ class ContactRespositoryImplTest {
         assertEquals(2, contactRepository.count());
 
 
-
         Contact newContact2 = new Contact();
         newContact2.setFirstName("Niyi");
         newContact2.setLastName("Toye");
-        Contact savedContact2 = contactRepository.save(newContact2);
+      Contact savedContact2 = contactRepository.save(newContact2);
         assertEquals(3, contactRepository.count());
 
-        Contact searchedName = contactRepository.findByFirstName("Nut");
-        contactRepository.delete(searchedName);
+        ArrayList<Contact> searchedName = contactRepository.findByName("Nut");
+        contactRepository.delete(savedContact1);
         assertEquals(2, contactRepository.count());
-
-
-
-
     }
     @Test
     public void saveContact_updateContactAndReturnNewContact(){
@@ -144,16 +136,6 @@ class ContactRespositoryImplTest {
         Contact savedContact2 = contactRepository.save(newContact2);
         assertEquals(3, contactRepository.count());
 
-        Contact nameToUpdate = contactRepository.findById(2);
-        nameToUpdate.setFirstName("Ayo");
-        nameToUpdate.setLastName("Segun");
-        Contact contact = contactRepository.update(nameToUpdate);
-
-        assertEquals(2,contact.getId());
-        assertEquals(3, contactRepository.count());
-
-        Contact verifyContact = contactRepository.findById(2);
-        assertEquals("Ayo", verifyContact.getFirstName());
     }
 
 }

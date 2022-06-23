@@ -6,6 +6,8 @@ import africa.semicolon.trueCaller.data.repositories.ContactRespositoryImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ContactServiceImplTest {
@@ -14,7 +16,7 @@ class ContactServiceImplTest {
     @BeforeEach
     public void setUp(){
         contactRepository = new ContactRespositoryImpl();
-        contactService = new ContactServiceImpl(contactRepository);
+        contactService = new ContactServiceImpl();
     }
     @Test
     public void saveContact_findContactReturnsContact(){
@@ -30,20 +32,12 @@ class ContactServiceImplTest {
         assertEquals(2, contactService.count());
     }
     @Test
-    public void saveContact_findContactByFirstNameAndReturnContact(){
+    public void saveContact_findContactByNameAndReturnListOfContact(){
         contactService.addContact("Ademola", "Megbabi", "08099993333");
         contactService.addContact("Ade", "Meg", "08122223333");
         contactService.addContact("ola", "babi", "08123423333");
-        Contact contact = contactService.findByFirstName("Ade");
-        assertEquals("Meg", contact.getLastName());
-    }
-    @Test
-    public void saveContact_findContactByLastNameAndReturnContactTest(){
-        contactService.addContact("Ademola", "Megbabi", "08099993333");
-        contactService.addContact("Ade", "Meg", "08122223333");
-        contactService.addContact("ola", "babi", "08123423333");
-        Contact contact = contactService.findByLastName("babi");
-        assertEquals(3, contact.getId());
+        ArrayList<Contact> contact = contactService.findByName("Ade");
+        assertEquals(1, contact.size());
     }
     @Test
     public void saveContact_findContactByPhoneNumberAndReturnContactTest(){
@@ -78,6 +72,27 @@ class ContactServiceImplTest {
         Contact contact = contactService.findById(3);
         contactService.delete(contact);
         assertEquals(2, contactService.count());
+    }
+    @Test
+    public void findMyName(){
+        contactService.addContact("bola", "faith", "1234");
+        contactService.addContact("bae", "bola","4567");
+        contactService.addContact("tola", "peace", "1567");
+
+        Contact contact = contactService.findById(2);
+        assertEquals("bae", contact.getFirstName());
+
+        contactService.delete(contact);
+
+        assertEquals(2, contactService.count());
+        Contact contact1 = contactService.findById(1);
+        assertEquals("bola", contact1.getFirstName());
+
+        contactService.addContact("Segun","seyi", "0999");
+        assertEquals(3, contactService.count());
+        Contact contact2 = contactService.findById(3);
+        assertEquals("tola", contactService.findByName("tola"));
+
     }
 
 }

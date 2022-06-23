@@ -9,9 +9,15 @@ public class ContactRespositoryImpl implements ContactRepository{
     List<Contact> contacts = new ArrayList<>();
     @Override
     public Contact save(Contact contact) {
-        contact.setId(contacts.size()+ 1);
-        contacts.add(contact);
+        if (contact.getId() != 0){
+            update(contact);
+        }else {
+            contact.setId(contacts.size()+ 1);
+            contacts.add(contact);
+            return contact;
+        }
         return contact;
+
     }
 
     @Override
@@ -19,17 +25,7 @@ public class ContactRespositoryImpl implements ContactRepository{
         return contacts.size();
     }
 
-    @Override
-    public Contact findByFirstName(String firstName) {
-        Contact contact;
-        for (int i = 0; i < contacts.size(); i++) {
-            contact = contacts.get(i);
-            if(firstName.equalsIgnoreCase(contact.getFirstName())){
-                return contact;
-            }
-        }
-        throw new NullPointerException("Contact not found");
-    }
+
 
     @Override
     public Contact findById(int id) {
@@ -37,15 +33,14 @@ public class ContactRespositoryImpl implements ContactRepository{
     }
 
     @Override
-    public Contact findByLastName(String lastName) {
-        Contact contact;
-        for (Contact value : contacts) {
-            contact = value;
-            if (lastName.equals(contact.getLastName())) {
-                return contact;
+    public ArrayList<Contact> findByName(String name) {
+        ArrayList<Contact> duplicatedNames = new ArrayList<>();
+        for (Contact contact : contacts) {
+            if (name.equalsIgnoreCase(contact.getFirstName()) || name.equalsIgnoreCase(contact.getLastName())) {
+                duplicatedNames.add(contact);
             }
         }
-        throw new NullPointerException("Contact not found");
+        return duplicatedNames;
     }
 
     @Override
@@ -53,8 +48,7 @@ public class ContactRespositoryImpl implements ContactRepository{
         contacts.remove(contact);
     }
 
-    @Override
-    public Contact update(Contact contact) {
+    private Contact update(Contact contact) {
         contacts.set(contact.getId() - 1,contact);
         return contact;
     }
