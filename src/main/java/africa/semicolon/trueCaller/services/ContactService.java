@@ -2,16 +2,15 @@ package africa.semicolon.trueCaller.services;
 
 import africa.semicolon.trueCaller.data.models.Contact;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface ContactService {
     void addContact(String firstName, String lastName, String phoneNumber);
 
-    Contact findById(int id);
 
-    int count();
+    List<Contact> findName(String name);
 
-    ArrayList<Contact> findByName(String name);
+    Contact findById(String id);
 
     Contact findByPhoneNumber(String phoneNumber);
 
